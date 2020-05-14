@@ -1,0 +1,37 @@
+import processing.video.*;
+import processing.serial.*;  
+Serial myPort;  
+Movie video;
+String data="";
+PFont  myFont; 
+boolean x=false;
+
+
+
+void setup() {
+  background(25);
+  size(1280 ,710);
+  video = new Movie (this, "ElPutoAmo.mov");
+  myPort = new Serial(this, "COM8", 9600);
+  myPort.bufferUntil('\n');
+  frameRate(900);
+}
+
+void draw() {
+
+  data=myPort.readStringUntil('\n');
+  if (data!=null) {
+    float i= float(data);
+    if (i<=45) { 
+      x=true;
+    }
+    if (x) {
+      video.play();
+      if (video.available()) {  
+
+        video.read();
+      }
+      image(video, 0, 0);
+    }
+  }
+}
